@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>News App</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      .navbar-brand {
+        font-weight: bold;
+        font-size: 1.5rem;
+      }
+
+      .nav-link {
+        font-size: 1rem;
+      }
+
+      .btn-login {
+        font-weight: 500;
+      }
+
+      .footer {
+        background-color: #6c757d;
+        color: white;
+        padding: 20px 0;
+      }
+
+      .footer a {
+        color: #d1e0ff;
+        text-decoration: none;
+      }
+
+      .footer a:hover {
+        text-decoration: underline;
+      }
+
+      .card-img-top {
+        height: 295px;
+        object-fit: cover;
+      }
+
+      .news-card {
+        margin-top: 20px;
+      }
+
+      .card-body {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+      }
+
+      .card-title {
+        font-size: 1.2rem;
+      }
+
+      .card-text {
+        font-size: 0.9rem;
+        color: #555;
+      }
+    </style>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">News App</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#newsNavbar"
+          aria-controls="newsNavbar"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="newsNavbar">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" href="#" id="showTopHeadlinesBtn"
+                >Top Headlines</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#" id="showBitcoinNewsBtn"
+                >Bitcoin News</a
+              >
+            </li>
+          </ul>
+          <form
+            class="d-flex"
+            role="search"
+            onsubmit="searchNews(event)"
+            style="margin-right: 10px"
+          >
+            <input
+              class="form-control me-2"
+              type="search"
+              id="searchInput"
+              placeholder="Search News"
+              aria-label="Search"
+            />
+            <input
+              class="btn btn-light btn-login"
+              type="submit"
+              value="Search"
+            />
+          </form>
+          <button type="button" class="btn btn-success">
+            <a href="indexPage" class="text-decoration-none text-white"
+              >Logout</a
+            >
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container my-5 text-center">
+      <h1>Welcome to News App</h1>
+      <p>Explore the latest news headlines from various sources.</p>
+    </div>
+
+    <div class="container my-5">
+      <h2 class="text-center mb-4" id="contentTitle">Top Headlines</h2>
+      <div class="row" id="content-container"></div>
+    </div>
+
+    <footer class="footer mt-auto">
+      <div class="container text-center text-md-start">
+        <div class="row">
+          <div class="col-md-6 mb-3 mb-md-0">
+            <h5 class="text-white">News App</h5>
+            <p>Your one-stop destination for all trending news.</p>
+          </div>
+          <div class="col-md-3 mb-3">
+            <h6>Quick Links</h6>
+            <ul class="list-unstyled">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Top Headlines</a></li>
+              <li><a href="#">Bitcoin News</a></li>
+            </ul>
+          </div>
+          <div class="col-md-3 mb-3">
+            <h6>Contact</h6>
+            <ul class="list-unstyled">
+              <li>Email: support@newsapp.com</li>
+              <li>Phone: +1 234 567 8901</li>
+            </ul>
+          </div>
+        </div>
+        <hr class="my-3 border-light" />
+        <p class="text-center mb-0">
+          &copy; 2025 News App. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      const apiKey = "29ecaa96fb3b4ab6b826c3c780e4a93d";
+
+      const showTopHeadlines = () => {
+        const apiUrl = `https://newsapi.org/v2/top-headlines?sources=bbc-news&apiKey=${apiKey}`;
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            const newsContainer = document.getElementById("content-container");
+            newsContainer.innerHTML = "";
+
+            if (data.articles && data.articles.length) {
+              data.articles.forEach((article) => {
+                const newsCard = `
+                <div class="col-md-4 mb-4 news-card">
+                  <div class="card h-100 shadow-sm">
+                    <img src="${article.urlToImage}" class="card-img-top" alt="${article.title}">
+                    <div class="card-body">
+                      <h5 class="card-title">${article.title}</h5>
+                      <p class="card-text">${article.description}</p>
+                      <a href="${article.url}" class="btn btn-primary" target="_blank">Read More</a>
+                    </div>
+                  </div>
+                </div>
+              `;
+                newsContainer.innerHTML += newsCard;
+              });
+            } else {
+              newsContainer.innerHTML =
+                '<p class="text-danger text-center">No news found.</p>';
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to load news:", error);
+            const newsContainer = document.getElementById("content-container");
+            newsContainer.innerHTML = `<p class="text-danger text-center">Failed to load news data.</p>`;
+          });
+      };
+
+      const showBitcoinNews = () => {
+        const apiUrl = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=${apiKey}`;
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            const newsContainer = document.getElementById("content-container");
+            newsContainer.innerHTML = ""; // Clear previous results
+
+            if (data.articles && data.articles.length) {
+              data.articles.forEach((article) => {
+                const newsCard = `
+                <div class="col-md-4 mb-4 news-card">
+                  <div class="card h-100 shadow-sm">
+                    <img src="${article.urlToImage}" class="card-img-top" alt="${article.title}">
+                    <div class="card-body">
+                      <h5 class="card-title">${article.title}</h5>
+                      <p class="card-text">${article.description}</p>
+                      <a href="${article.url}" class="btn btn-primary" target="_blank">Read More</a>
+                    </div>
+                  </div>
+                </div>
+              `;
+                newsContainer.innerHTML += newsCard;
+              });
+            } else {
+              newsContainer.innerHTML =
+                '<p class="text-danger text-center">No bitcoin news found.</p>';
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to load bitcoin news:", error);
+            const newsContainer = document.getElementById("content-container");
+            newsContainer.innerHTML = `<p class="text-danger text-center">Failed to load bitcoin news data.</p>`;
+          });
+      };
+
+      const searchNews = (event) => {
+        event.preventDefault();
+
+        const searchQuery = document.getElementById("searchInput").value;
+
+        if (searchQuery.trim() === "") {
+          alert("Please enter a search query.");
+          return;
+        }
+
+        const apiUrl = `https://newsapi.org/v2/everything?q=${searchQuery}&apiKey=${apiKey}`;
+        fetch(apiUrl)
+          .then((response) => response.json())
+          .then((data) => {
+            const newsContainer = document.getElementById("content-container");
+            newsContainer.innerHTML = "";
+
+            if (data.articles && data.articles.length) {
+              data.articles.forEach((article) => {
+                const newsCard = `
+                <div class="col-md-4 mb-4 news-card">
+                  <div class="card h-100 shadow-sm">
+                    <img src="${article.urlToImage}" class="card-img-top" alt="${article.title}">
+                    <div class="card-body">
+                      <h5 class="card-title">${article.title}</h5>
+                      <p class="card-text">${article.description}</p>
+                      <a href="${article.url}" class="btn btn-primary" target="_blank">Read More</a>
+                    </div>
+                  </div>
+                </div>
+              `;
+                newsContainer.innerHTML += newsCard;
+              });
+            } else {
+              newsContainer.innerHTML =
+                '<p class="text-danger text-center">No search results found.</p>';
+            }
+          })
+          .catch((error) => {
+            console.error("Failed to load search results:", error);
+            const newsContainer = document.getElementById("content-container");
+            newsContainer.innerHTML = `<p class="text-danger text-center">Failed to load search data.</p>`;
+          });
+      };
+
+      showTopHeadlines();
+
+      document
+        .getElementById("showTopHeadlinesBtn")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          showTopHeadlines();
+        });
+
+      document
+        .getElementById("showBitcoinNewsBtn")
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          showBitcoinNews();
+        });
+    </script>
+  </body>
+</html>
