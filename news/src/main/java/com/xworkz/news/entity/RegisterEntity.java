@@ -45,5 +45,13 @@ public class RegisterEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name="otp")
+    private String otp;
+
+    @Column(name = "file_name")
+    private String fileName;
+
+    @Column(name = "file_Content_Type")
+    private String fileContentType;
 
 }

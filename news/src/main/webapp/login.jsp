@@ -53,7 +53,7 @@
           <div class="col-md-4 offset-md-1">
             <div class="card mb-3" style="width: 20rem;">
               <div class="card-header text-center bg-primary text-white">
-                <h5>Admin Login</h5> <!-- Title inside the card -->
+                <h5>User Login</h5> <!-- Title inside the card -->
               </div>
               <div class="p-3 bg-light">
                 <div class="card-body">
@@ -74,7 +74,7 @@
                       <div class="col-12">
                         <button type="submit" class="btn btn-primary" id="button">Login</button>
                       </div>
-
+    <a href="forgotPassword" style="text-decoration: none;">Forgotten Password?</a>
                     </div>
                   </form>
                 </div>

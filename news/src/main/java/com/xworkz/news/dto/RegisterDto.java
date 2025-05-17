@@ -64,4 +64,9 @@ public class RegisterDto {
     @NotBlank
     private String confirmPassword;
 
+    private String otp;
+
+    private String fileName;
+
+    private String fileContentType;
 }

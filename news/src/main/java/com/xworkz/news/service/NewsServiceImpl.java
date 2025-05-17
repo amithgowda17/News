@@ -5,6 +5,8 @@ import com.xworkz.news.dto.RegisterDto;
 import com.xworkz.news.entity.LoginEntity;
 import com.xworkz.news.entity.RegisterEntity;
 import com.xworkz.news.repository.NewsRepository;
+import com.xworkz.news.util.EmailSent;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +15,14 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Service
+@Slf4j
 public class NewsServiceImpl implements NewsService{
 
     @Autowired
     NewsRepository newsRepository;
+
+    @Autowired
+    EmailSent emailSent;
 
     @Override
     public String registerInService(RegisterDto registerationDto) {
@@ -25,12 +31,15 @@ public class NewsServiceImpl implements NewsService{
         if (registerEntity1 != null || registerEntity2 != null) {
             return null;
         } else if (registerationDto.getPassword().equals(registerationDto.getConfirmPassword())) {
+            registerationDto.setFileName("dummy.png");
+            registerationDto.setFileContentType("image/png");
             RegisterEntity registerEntity = new RegisterEntity();
-            System.out.println(registerationDto);
             BeanUtils.copyProperties(registerationDto, registerEntity);
             System.out.println(registerEntity);
             boolean isSaved = newsRepository.register(registerEntity);
             if (isSaved == true) {
+                emailSent.mailSend(registerationDto.getEmail());
+                log.info("Registering user {}",registerationDto.getEmail());
                 return "Registration Successfull";
             }
             return null;

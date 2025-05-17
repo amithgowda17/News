@@ -43,7 +43,7 @@
 
             <form action="register" method="post" onclick="form()" >
 
-              <h3 class="row justify-content-center">Register Admin</h3>
+              <h3 class="row justify-content-center">Register User</h3>
 
               <div style="margin-top: 8%;">
                 <div class="row">

@@ -12,12 +12,14 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.List;
 
 @Controller
 @RequestMapping("/")
 public class NewsController {
+
 
     @Autowired
     NewsService newsService;
@@ -79,7 +81,7 @@ public class NewsController {
                 redirectAttributes.addFlashAttribute("enteredEmail", loginDto.getEmail());
                 return "redirect:/loginPage";
             } else {
-                return "redirect:/user";
+                return "redirect:/getUserPage?email=" + registerationDto.getEmail();
             }
         }
     }
@@ -90,8 +92,24 @@ public class NewsController {
     }
 
 
-    @GetMapping("user")
-    public String getUserPage(){
+    @GetMapping("getUserPage")
+    public String getUserPage(String email, Model model, HttpSession httpSession) {
+        RegisterDto registerationDto = newsService.findByEmailInService(email);
+        httpSession.setAttribute("email",registerationDto.getEmail());
+        model.addAttribute("details", registerationDto);
+        model.addAttribute("apiKey","29ecaa96fb3b4ab6b826c3c780e4a93d");
         return "userPage";
     }
+
+    @GetMapping("forgotPassword")
+    public String forgotPassword() {
+        return "emailOtp";
+    }
+
+    @GetMapping("home")
+    public String getHomePage(Model model,HttpSession httpSession){
+        String email = (String)httpSession.getAttribute("email");
+        return this.getUserPage(email,model,httpSession);
+    }
+
 }
