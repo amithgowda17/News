@@ -66,6 +66,10 @@ public class RegisterDto {
 
     private String otp;
 
+    private Integer noOfAttempts;
+
+    private boolean isAccountLocked;
+
     private String fileName;
 
     private String fileContentType;

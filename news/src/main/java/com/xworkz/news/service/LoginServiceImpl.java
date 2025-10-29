@@ -64,6 +64,8 @@ public class LoginServiceImpl implements LoginService{
         if (registerationDto != null) {
             if (password.equals(confirmPassword)) {
                 registerationDto.setPassword(password);
+                registerationDto.setNoOfAttempts(0);
+                registerationDto.setAccountLocked(false);
                 RegisterEntity registerEntity = new RegisterEntity();
                 BeanUtils.copyProperties(registerationDto, registerEntity);
                 loginRepository.updateProfile(registerEntity);

@@ -74,6 +74,10 @@ public class NewsController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("loginErrMsg", "Please enter valid data");
             return "login";
+        }else if (registerationDto.isAccountLocked()) {
+            model.addAttribute("blockedMessage", "Account blocked can't login reset your password");
+            model.addAttribute("emailDto", registerationDto);
+            return "emailOtp";
         } else {
             String message = newsService.loginDetails(loginDto);
             if (message.equals("invalid password")) {

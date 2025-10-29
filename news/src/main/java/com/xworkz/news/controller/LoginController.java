@@ -66,6 +66,7 @@ public class LoginController {
             boolean isPasswordUpdated = loginService.updatePasswordInService(email, password, confirmPassword);
             if (isPasswordUpdated) {
                 model.addAttribute("success","password reset successfull");
+                model.addAttribute("enteredEmail",email);
                 return "login";
             }
         }

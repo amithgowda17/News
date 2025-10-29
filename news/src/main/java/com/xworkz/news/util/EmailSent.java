@@ -40,7 +40,7 @@ public class EmailSent {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage,"UTF-8");
             helper.setFrom("amith.s.xworkz@gmail.com");
             helper.addTo(email);
-            helper.setSubject("Metro Registration");
+            helper.setSubject("News App Registration");
             String content = "<html>" +
                     "<body>" +
                     "<p>Your registration was completed successfully!</p>" +
